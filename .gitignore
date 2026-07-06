@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# TypeScript 增量构建缓存（误跑 tsc 时可能出现在项目根目录）
+*.tsbuildinfo
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
