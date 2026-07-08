@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useFetch } from '@/composables/useFetch';
-import type { GithubUser } from '@/types/github';
-
-import ErrorState from './components/ErrorState.vue';
-import LoadingState from './components/LoadingState.vue';
-import UserCard from './components/UserCard.vue';
+import { GithubUserSchema, type GithubUser } from '@/types/github';
+import ErrorState from '@/components/ErrorState.vue';
+import LoadingState from '@/components/LoadingState.vue';
+import UserCard from '@/components/UserCard.vue';
 const username = ref('');
 const link = computed(() => {
   if (!username.value) return '';
   return `https://api.github.com/users/${username.value}`;
 });
-const { state } = useFetch<GithubUser>(link);
+const { state } = useFetch<GithubUser>(GithubUserSchema, link);
 
 </script>
 

@@ -1,7 +1,9 @@
 import type { Ref } from "vue";
 import { ref, watch } from "vue";
+import { z, type ZodType } from "zod";
 import type { FetchState } from "@/types/github";
-export function useFetch<T>(url: string | Ref<string>) {
+
+export function useFetch<T>(schema: ZodType<T>, url: string | Ref<string>) {
   const state = ref<FetchState<T>>({ status: "idle" });
   async function execute() {
     const urlStr = typeof url === "string" ? url : url.value;
@@ -29,8 +31,13 @@ export function useFetch<T>(url: string | Ref<string>) {
         return;
       }
       const jsonData = await res.json();
-      state.value = { status: "success", data: jsonData };
+      const result = schema.parse(jsonData);
+      state.value = { status: "success", data: result };
     } catch (err) {
+      if (err instanceof z.ZodError) {
+        state.value = { status: "error", message: "数据格式异常" };
+        return;
+      }
       state.value = {
         status: "error",
         message: err instanceof Error ? err.message : "网络异常",
