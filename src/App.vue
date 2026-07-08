@@ -17,9 +17,9 @@ const { state } = useFetch<GithubUser>(GithubUserSchema, link);
 <template>
   <div class="app">
     <h1>Input your name</h1>
-    <input type="text" v-model="username" />
+    <input v-model="username" type="text" />
     <p>{{ link }}</p>
-    <div class="info" v-if="state.status !== 'idle'">
+    <div v-if="state.status !== 'idle'" class="info">
       <LoadingState v-if="state.status === 'loading'" />
       <ErrorState v-else-if="state.status === 'error'" :message="state.message" />
       <UserCard v-else-if="state.status === 'success'" :user="state.data" />
