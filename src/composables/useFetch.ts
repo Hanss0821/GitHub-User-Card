@@ -2,6 +2,7 @@ import type { Ref } from 'vue'
 import { ref, watch } from 'vue'
 import { z, type ZodType } from 'zod'
 import type { FetchState } from '@/types/github'
+
 export function useFetch<T>(schema: ZodType<T>, url: string | Ref<string>) {
   const state = ref<FetchState<T>>({ status: 'idle' })
   async function execute(signal?: AbortSignal) {
