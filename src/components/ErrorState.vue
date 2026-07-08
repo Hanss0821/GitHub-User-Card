@@ -7,13 +7,12 @@
 //         default: ''
 //     }
 // });
-const { message = "" } = defineProps<{
-    message: string
+const { message } = defineProps<{
+  message: string
 }>()
-
 </script>
 <template>
-    <div class="error-state">
-        <p>{{ message }}</p>
-    </div>
+  <div class="error-state">
+    <p>{{ message }}</p>
+  </div>
 </template>
