@@ -1,5 +1,5 @@
 import type { Ref } from "vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import type { FetchState } from "@/types/github";
 export function useFetch<T>(url: string | Ref<string>) {
   const state = ref<FetchState<T>>({ status: "idle" });
@@ -21,7 +21,10 @@ export function useFetch<T>(url: string | Ref<string>) {
       if (!res.ok) {
         state.value = {
           status: "error",
-          message: `请求失败: ${res.status} ${res.statusText}`,
+          message:
+            res.status === 404
+              ? `用户不存在`
+              : `请求失败: ${res.status} ${res.statusText}`,
         };
         return;
       }
@@ -34,6 +37,19 @@ export function useFetch<T>(url: string | Ref<string>) {
       };
     }
   }
+  //   const isUrlRef = (url: string | Ref<string>): url is Ref<string> => {
+  //     return typeof url !== "string";
+  //   };
+  // 单一参数只能是Ref对象
+  watch(
+    () => (typeof url === "string" ? url : url.value),
+    () => {
+      execute();
+    },
+    {
+      immediate: true,
+    },
+  );
   // 既然要返回对象类型
   return {
     state,
